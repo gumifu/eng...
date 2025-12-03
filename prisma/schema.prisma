@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  entries   Entry[]
+}
+
+model Entry {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date            DateTime        @default(now())
+  title           String?
+  originalText    String
+  correctedText   String?
+  upgradedText    String?
+  cefrLevel       String?         // "A2", "B1", "B2", etc.
+  mood            String?        // "🙂", "😐", "😭"
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  entryAnalyses   EntryAnalysis[]
+
+  @@index([userId])
+  @@index([date])
+}
+
+model EntryAnalysis {
+  id          String   @id @default(cuid())
+  entryId     String
+  entry       Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  errorType   String   // "article", "preposition", "tense", "word_order", "vocabulary", "spelling", "other"
+  count       Int      @default(1)
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  @@index([entryId])
+  @@index([errorType])
+}
+

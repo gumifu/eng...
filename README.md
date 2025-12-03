@@ -1,36 +1,203 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# English Diary Corrector
 
-## Getting Started
+Write daily English diary entries and get AI-powered corrections instantly.
 
-First, run the development server:
+## 機能
+
+### MVP機能
+
+- ✅ 日記の作成と保存
+- ✅ AIによる即座の添削
+- ✅ ミスの分類（冠詞、前置詞、時制など）
+- ✅ CEFRレベル判定（A2/B1/B2など）
+- ✅ 「今のレベル」と「1つ上のレベル」の2バージョンで添削
+- ✅ 弱点分析ページ
+- ✅ おすすめ勉強ポイントの表示
+
+### 画面構成
+
+1. **ホーム / ダッシュボード**
+   - 今日の一言メッセージ
+   - 連続記録日数
+   - 最近の弱点TOP3
+   - 「今日の日記を書く」ボタン
+
+2. **日記を書く画面**
+   - 日記の入力（タイトル、本文、気分）
+   - 添削結果の表示
+   - 1つ上のレベルでの書き直し
+   - ミスのハイライトと解説
+
+3. **弱点分析ページ**
+   - エラー統計グラフ
+   - 最近よく出るミスTOP3
+   - 今日のおすすめ勉強ポイント
+   - 例文とミニ練習問題
+
+## 技術スタック
+
+- **フロントエンド**: Next.js 16 (App Router), React 19, TypeScript
+- **UI**: Tailwind CSS
+- **AI**: OpenAI API (GPT-4o-mini)
+- **データベース**: Prisma + SQLite (開発環境)
+
+## セットアップ
+
+### 1. 依存関係のインストール
+
+```bash
+npm install
+```
+
+### 2. 環境変数の設定
+
+`.env` ファイルを作成し、以下の環境変数を設定してください：
+
+```env
+# Database
+DATABASE_URL="file:./dev.db"
+
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-key-here"
+
+# OpenAI
+OPENAI_API_KEY="your-openai-api-key-here"
+```
+
+### 3. データベースのセットアップ
+
+```bash
+# Prismaクライアントの生成（Node.jsのバージョンが古い場合はスキップ）
+npx prisma generate
+
+# データベースのマイグレーション（Node.jsのバージョンが古い場合はスキップ）
+npx prisma migrate dev
+```
+
+**注意**: 現在のNode.jsバージョン（v20.6.0）では、Prismaの最新版がインストールできない可能性があります。その場合は、データベース機能は後で追加できます。
+
+### 4. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## プロジェクト構造
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+.
+├── app/
+│   ├── api/
+│   │   ├── correct/      # 添削API
+│   │   ├── upgrade/       # 1つ上のレベルAPI
+│   │   └── recommend/    # おすすめ勉強ポイントAPI
+│   ├── write/            # 日記を書く画面
+│   ├── weaknesses/       # 弱点分析ページ
+│   ├── layout.tsx        # レイアウト（ナビゲーション含む）
+│   └── page.tsx          # ホーム画面
+├── lib/
+│   ├── types.ts          # 型定義
+│   └── utils.ts          # ユーティリティ関数
+├── prisma/
+│   └── schema.prisma     # データベーススキーマ
+└── README.md
+```
 
-## Learn More
+## APIエンドポイント
 
-To learn more about Next.js, take a look at the following resources:
+### POST /api/correct
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+日記を添削します。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**リクエスト:**
+```json
+{
+  "text": "I go to school yesterday."
+}
+```
 
-## Deploy on Vercel
+**レスポンス:**
+```json
+{
+  "corrected_text": "I went to school yesterday.",
+  "explanations": [
+    {
+      "original": "I go",
+      "corrected": "I went",
+      "reason_en": "Past tense is needed",
+      "reason_ja": "過去形が必要です",
+      "type": "tense"
+    }
+  ],
+  "cefr_level": "A2",
+  "error_summary": {
+    "article": 0,
+    "preposition": 0,
+    "tense": 1,
+    "word_order": 0,
+    "vocabulary": 0,
+    "spelling": 0,
+    "other": 0
+  }
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### POST /api/upgrade
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+テキストを1つ上のレベルに書き直します。
+
+**リクエスト:**
+```json
+{
+  "text": "I went to school yesterday.",
+  "currentLevel": "B1"
+}
+```
+
+**レスポンス:**
+```json
+{
+  "upgraded_text": "I attended school yesterday."
+}
+```
+
+### POST /api/recommend
+
+弱点に基づいておすすめ勉強ポイントを生成します。
+
+**リクエスト:**
+```json
+{
+  "errorSummary": {
+    "article": 5,
+    "preposition": 3,
+    "tense": 1
+  }
+}
+```
+
+**レスポンス:**
+```json
+{
+  "focus_point_ja": "冠詞の使い方を復習しましょう",
+  "explanation_en": "Articles (a, an, the) are important for natural English.",
+  "examples": ["I saw a cat.", "The cat was black.", "Cats are cute."],
+  "practice_questions": [...]
+}
+```
+
+## 今後の拡張機能
+
+- [ ] ユーザー認証（NextAuth.js）
+- [ ] データベースへの日記保存
+- [ ] 日記の検索・フィルタリング
+- [ ] グラフでの弱点可視化
+- [ ] ダークモードの完全対応
+- [ ] 日記のエクスポート機能
+
+## ライセンス
+
+MIT
