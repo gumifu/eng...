@@ -86,7 +86,7 @@ export default function DemoPage() {
       const sectionHeight = window.innerHeight;
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
-      
+
       // 最後のセクション（17: フッター）の場合は最初のセクション（0）に戻る
       // ただし、スクロール位置は18（最初のセクションの複製）に移動
       let nextSectionIndex;
@@ -387,7 +387,7 @@ export default function DemoPage() {
         {Array.from({ length: 16 }).map((_, index) => (
           <section
             key={index}
-            className="h-screen w-full flex items-center justify-center relative"
+            className="h-screen w-full flex items-end justify-start relative"
             style={{
               backgroundImage: `url(${getFashionImage(index)})`,
               backgroundSize: "cover",
@@ -397,7 +397,7 @@ export default function DemoPage() {
           >
             {/* フォールバック背景（画像が読み込めない場合） */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 -z-10" />
-            <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10">
+            <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10 pb-8 pl-8">
               Section {index + 1}
             </div>
           </section>
@@ -442,7 +442,7 @@ export default function DemoPage() {
 
         {/* セクション18: 最初のセクションの複製（ループ用） */}
         <section
-          className="h-screen w-full flex items-center justify-center relative"
+          className="h-screen w-full flex items-end justify-start relative"
           style={{
             backgroundImage: `url(${getFashionImage(0)})`,
             backgroundSize: "cover",
@@ -452,7 +452,7 @@ export default function DemoPage() {
         >
           {/* フォールバック背景（画像が読み込めない場合） */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 -z-10" />
-          <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10">
+          <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10 pb-8 pl-8">
             Section 1
           </div>
         </section>
