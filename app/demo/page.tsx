@@ -466,7 +466,7 @@ export default function DemoPage() {
           right: "16px",
           transform: "translateY(-50%)",
           height: isLongPress ? "120px" : "auto", // 上下40px + ボタン40px = 120px
-          width: isLongPress ? "56px" : "48px", // 左右8px + ボタン40px = 56px
+          width: isLongPress ? "56px" : "auto", // 長押し時: 左右8px + ボタン40px = 56px、通常時: ドットの幅に合わせる
           paddingTop: "80px",
           paddingBottom: "80px",
           userSelect: "none",
@@ -474,6 +474,8 @@ export default function DemoPage() {
           MozUserSelect: "none",
           msUserSelect: "none",
           touchAction: "none",
+          pointerEvents: "auto",
+          cursor: "default",
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -483,84 +485,92 @@ export default function DemoPage() {
         onDragStart={(e) => e.preventDefault()}
         onMouseDown={(e) => e.preventDefault()}
       >
-        {/* 外側の枠（楕円形、長押し後に表示、固定） */}
-        {isLongPress && (
-          <div
-            className="absolute rounded-full transition-all duration-300 ease-out"
-            style={{
-              top: "40px",
-              bottom: "40px",
-              left: "8px",
-              right: "8px",
-              background: "rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(20px) saturate(180%)",
-              WebkitBackdropFilter: "blur(20px) saturate(180%)",
-              border: "1px solid rgba(255, 255, 255, 0.18)",
-              boxShadow:
-                "0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
-            }}
-          />
-        )}
+        {/* 外側の枠（楕円形、常に表示、スムーズなtransition） */}
+        <div
+          className="absolute rounded-full transition-all duration-500 ease-out"
+          style={{
+            top: isLongPress ? "40px" : "40px",
+            bottom: isLongPress ? "40px" : "40px",
+            left: isLongPress ? "8px" : "8px",
+            right: isLongPress ? "8px" : "8px",
+            background: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            border: "1px solid rgba(255, 255, 255, 0.18)",
+            boxShadow:
+              "0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+            cursor: "none",
+            opacity: 1,
+          }}
+        />
 
         {/* 長押し前：5つのドット（カルーセルインジケーター） */}
-        {!isLongPress && (
-          <div className="relative flex flex-col items-center justify-center gap-2 py-2">
-            {/* 5つのドット（現在のセクションに対応） */}
-            {[0, 1, 2, 3, 4].map((dotIndex) => {
-              // 17セクションを5つのドットにマッピング
-              // 各ドットは約3-4セクションを表す
-              const sectionRange = 17 / 5; // 3.4セクション/ドット
-              const sectionStart = Math.floor(dotIndex * sectionRange);
-              const sectionEnd = Math.floor((dotIndex + 1) * sectionRange);
-              const isActive =
-                currentSection >= sectionStart && currentSection < sectionEnd;
+        <div
+          className="relative flex flex-col items-center justify-center gap-2 py-2 z-10 transition-all duration-500 ease-out"
+          style={{
+            cursor: "none",
+            opacity: isLongPress ? 0 : 1,
+            transform: isLongPress ? "scale(0.8)" : "scale(1)",
+            pointerEvents: isLongPress ? "none" : "auto",
+          }}
+        >
+          {[0, 1, 2, 3, 4].map((dotIndex) => {
+            // 17セクションを5つのドットにマッピング
+            // 各ドットは約3-4セクションを表す
+            const sectionRange = 17 / 5; // 3.4セクション/ドット
+            const sectionStart = Math.floor(dotIndex * sectionRange);
+            const sectionEnd = Math.floor((dotIndex + 1) * sectionRange);
+            const isActive =
+              currentSection >= sectionStart && currentSection < sectionEnd;
 
-              return (
-                <div
-                  key={dotIndex}
-                  className="w-2 h-2 rounded-full transition-all duration-300"
-                  style={{
-                    background: isActive
-                      ? "rgba(255, 255, 255, 0.9)"
-                      : "rgba(255, 255, 255, 0.5)",
-                    transform: isActive ? "scale(1.2)" : "scale(1)",
-                    boxShadow: isActive
-                      ? "0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2)"
-                      : "0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)",
-                  }}
-                />
-              );
-            })}
-          </div>
-        )}
+            return (
+              <div
+                key={dotIndex}
+                className="w-2 h-2 rounded-full transition-all duration-300"
+                style={{
+                  background: isActive
+                    ? "rgba(255, 255, 255, 0.9)"
+                    : "rgba(255, 255, 255, 0.5)",
+                  transform: isActive ? "scale(1.2)" : "scale(1)",
+                  boxShadow: isActive
+                    ? "0 2px 8px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2)"
+                    : "0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)",
+                  cursor: "none",
+                }}
+              />
+            );
+          })}
+        </div>
 
         {/* 長押し後：内側のボタン（動く部分） */}
-        {isLongPress && (
+        <div
+          className="relative flex items-center justify-center transition-all duration-500 ease-out"
+          style={{
+            transform: isLongPress
+              ? `translate(${buttonOffset.x}px, ${buttonOffset.y}px) scale(1)`
+              : "translate(0, 0) scale(0.8)",
+            opacity: isLongPress ? 1 : 0,
+            pointerEvents: isLongPress ? "auto" : "none",
+          }}
+        >
           <div
-            className="relative flex items-center justify-center transition-transform duration-100 ease-out"
+            className="rounded-full transition-all duration-300 ease-out flex items-center justify-center"
             style={{
-              transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px)`,
+              width: "40px",
+              height: "40px",
+              transform: `scale(${isDragging ? 1.05 : 1})`,
+              background: isDragging
+                ? "rgba(255, 255, 255, 0.35)"
+                : "rgba(255, 255, 255, 0.3)",
+              backdropFilter: "blur(10px) saturate(180%)",
+              WebkitBackdropFilter: "blur(10px) saturate(180%)",
+              border: "1px solid rgba(255, 255, 255, 0.4)",
+              boxShadow: isDragging
+                ? "0 8px 24px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.1)"
+                : "0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.08)",
             }}
-          >
-            <div
-              className="rounded-full transition-all duration-300 ease-out flex items-center justify-center"
-              style={{
-                width: "40px",
-                height: "40px",
-                transform: `scale(${isDragging ? 1.05 : 1})`,
-                background: isDragging
-                  ? "rgba(255, 255, 255, 0.35)"
-                  : "rgba(255, 255, 255, 0.3)",
-                backdropFilter: "blur(10px) saturate(180%)",
-                WebkitBackdropFilter: "blur(10px) saturate(180%)",
-                border: "1px solid rgba(255, 255, 255, 0.4)",
-                boxShadow: isDragging
-                  ? "0 8px 24px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(0, 0, 0, 0.1)"
-                  : "0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.08)",
-              }}
-            ></div>
-          </div>
-        )}
+          ></div>
+        </div>
       </div>
 
       {/* スタイル（スクロールバー非表示用、モバイルでのカーソル非表示用） */}
@@ -578,10 +588,8 @@ export default function DemoPage() {
             cursor: none !important;
           }
         }
-        /* コントローラー上では常にカーソルを非表示 */
-        [data-demo-page] [class*="touch-none"] {
-          cursor: none !important;
-        }
+        /* コントローラーのコンテナ自体はカーソルを表示（周辺は通常のカーソル） */
+        /* コントローラー内の要素のみカーソルを非表示（インラインスタイルで設定済み） */
       `}</style>
     </div>
   );
