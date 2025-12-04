@@ -46,7 +46,7 @@ export default function DemoPage() {
   const [isLongPress, setIsLongPress] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [buttonOffset, setButtonOffset] = useState({ x: 0, y: 0 }); // ボタンの移動量
-  const [currentSection, setCurrentSection] = useState(0); // 現在のセクション（0-15）
+  const [currentSection, setCurrentSection] = useState(0); // 現在のセクション（0-16）
   const [isCarouselPaused, setIsCarouselPaused] = useState(true); // カルーセルの一時停止（初期は停止）
   const [isMounted, setIsMounted] = useState(false); // マウント状態
 
@@ -86,7 +86,7 @@ export default function DemoPage() {
       const sectionHeight = window.innerHeight;
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
-      const nextSectionIndex = Math.min(currentSectionIndex + 1, 15);
+      const nextSectionIndex = Math.min(currentSectionIndex + 1, 16);
       const targetScroll = nextSectionIndex * sectionHeight;
 
       // スムーズに次のセクションへスクロール
@@ -116,7 +116,7 @@ export default function DemoPage() {
     const sectionHeight = window.innerHeight;
     const currentScroll = scrollElement.scrollTop;
     const section = Math.round(currentScroll / sectionHeight);
-    setCurrentSection(Math.min(section, 15));
+    setCurrentSection(Math.min(section, 16));
   }, []);
 
   // アニメーションループ（最適化版）
@@ -164,6 +164,11 @@ export default function DemoPage() {
   // 長押し開始
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+    // テキスト選択を防ぐ
+    if (e.target instanceof HTMLElement) {
+      e.target.style.userSelect = "none";
+    }
     if (!dotRef.current) return;
 
     // カルーセルを一時停止
@@ -196,6 +201,8 @@ export default function DemoPage() {
   // 移動追跡（最適化版）
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging || !dotRef.current) return;
+    e.preventDefault();
+    e.stopPropagation();
 
     const currentX = e.clientX;
     const currentY = e.clientY;
@@ -367,23 +374,66 @@ export default function DemoPage() {
             </div>
           </section>
         ))}
+        
+        {/* セクション17: フッター */}
+        <section className="h-screen w-full flex flex-col items-center justify-center relative bg-black">
+          <div className="text-white text-center px-8 max-w-4xl">
+            <h2 className="text-4xl font-bold mb-8">Thank you for visiting</h2>
+            <p className="text-xl text-gray-300 mb-12">
+              Discover the latest fashion trends and styles
+            </p>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-8 text-gray-400">
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">About</h3>
+                <p className="text-sm">Our Story</p>
+                <p className="text-sm">Careers</p>
+                <p className="text-sm">Press</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">Customer Service</h3>
+                <p className="text-sm">Contact Us</p>
+                <p className="text-sm">Shipping</p>
+                <p className="text-sm">Returns</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-2">Follow Us</h3>
+                <p className="text-sm">Instagram</p>
+                <p className="text-sm">Twitter</p>
+                <p className="text-sm">Facebook</p>
+              </div>
+            </div>
+            <div className="mt-12 pt-8 border-t border-gray-700 text-gray-500 text-sm">
+              <p>&copy; 2024 Fashion Brand. All rights reserved.</p>
+            </div>
+          </div>
+        </section>
       </div>
 
       {/* コントローラードット（右端中央配置、Apple風デザイン） */}
       <div
         ref={dotRef}
-        className="fixed top-1/2 touch-none z-50 flex flex-col items-center justify-center transition-all duration-300 ease-out"
+        className="fixed top-1/2 touch-none z-50 flex flex-col items-center justify-center transition-all duration-300 ease-out select-none"
         style={{
           right: "16px",
           transform: "translateY(-50%)",
           height: isLongPress ? "120px" : "auto", // 上下40px + ボタン40px = 120px
           width: isLongPress ? "56px" : "48px", // 左右8px + ボタン40px = 56px
+          paddingTop: "80px",
+          paddingBottom: "80px",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          MozUserSelect: "none",
+          msUserSelect: "none",
+          cursor: "none",
+          touchAction: "none",
         }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         onPointerLeave={handlePointerLeave}
+        onDragStart={(e) => e.preventDefault()}
+        onMouseDown={(e) => e.preventDefault()}
       >
         {/* 外側の枠（楕円形、長押し後に表示、固定） */}
         {isLongPress && (
@@ -409,9 +459,9 @@ export default function DemoPage() {
           <div className="relative flex flex-col items-center justify-center gap-2 py-2">
             {/* 5つのドット（現在のセクションに対応） */}
             {[0, 1, 2, 3, 4].map((dotIndex) => {
-              // 16セクションを5つのドットにマッピング
+              // 17セクションを5つのドットにマッピング
               // 各ドットは約3-4セクションを表す
-              const sectionRange = 16 / 5; // 3.2セクション/ドット
+              const sectionRange = 17 / 5; // 3.4セクション/ドット
               const sectionStart = Math.floor(dotIndex * sectionRange);
               const sectionEnd = Math.floor((dotIndex + 1) * sectionRange);
               const isActive =
@@ -465,10 +515,17 @@ export default function DemoPage() {
         )}
       </div>
 
-      {/* スタイル（スクロールバー非表示用） */}
+      {/* スタイル（スクロールバー非表示用、カーソル非表示用） */}
       <style jsx global>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+        [data-demo-page] * {
+          cursor: none !important;
+          -webkit-tap-highlight-color: transparent;
+        }
+        [data-demo-page] *:active {
+          cursor: none !important;
         }
       `}</style>
     </div>
