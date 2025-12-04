@@ -86,16 +86,19 @@ export default function DemoPage() {
       const sectionHeight = window.innerHeight;
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
-
-      // 最後のセクション（16）の場合は最初のセクション（0）に戻る
+      
+      // 最後のセクション（17: フッター）の場合は最初のセクション（0）に戻る
+      // ただし、スクロール位置は18（最初のセクションの複製）に移動
       let nextSectionIndex;
-      if (currentSectionIndex >= 16) {
+      let targetScroll;
+      if (currentSectionIndex >= 17) {
+        // フッターを過ぎたら最初のセクションの複製（18）に移動
         nextSectionIndex = 0;
+        targetScroll = 18 * sectionHeight;
       } else {
         nextSectionIndex = currentSectionIndex + 1;
+        targetScroll = nextSectionIndex * sectionHeight;
       }
-
-      const targetScroll = nextSectionIndex * sectionHeight;
 
       // スムーズに次のセクションへスクロール
       scrollElement.scrollTo({
@@ -123,22 +126,22 @@ export default function DemoPage() {
     const scrollElement = scrollContainerRef.current;
     const sectionHeight = window.innerHeight;
     const currentScroll = scrollElement.scrollTop;
-    const maxScroll = scrollElement.scrollHeight - scrollElement.clientHeight;
     const section = Math.round(currentScroll / sectionHeight);
 
-    // 最後のセクション（16）の終端に達したら最初のセクション（0）に戻る
-    // スクロール位置が最後のセクションの終端に近い場合（50px以内）
-    if (section >= 16 && currentScroll >= maxScroll - 50) {
-      // スムーズに最初のセクションにスクロール
-      setTimeout(() => {
+    // フッター（セクション17）を過ぎて最初のセクションの複製（セクション18）に到達したら、
+    // 見えないように元の最初のセクション（セクション0）の位置にジャンプ
+    if (section >= 18) {
+      // 瞬時に最初のセクションに戻す（ユーザーには見えない）
+      // requestAnimationFrameを使ってスムーズに
+      requestAnimationFrame(() => {
         if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
+          scrollContainerRef.current.scrollTop = 0;
         }
-      }, 100);
+      });
       setCurrentSection(0);
+    } else if (section === 17) {
+      // フッターセクション
+      setCurrentSection(16);
     } else {
       setCurrentSection(Math.min(section, 16));
     }
@@ -434,6 +437,23 @@ export default function DemoPage() {
             <div className="mt-12 pt-8 border-t border-gray-700 text-gray-500 text-sm">
               <p>&copy; 2024 Fashion Brand. All rights reserved.</p>
             </div>
+          </div>
+        </section>
+
+        {/* セクション18: 最初のセクションの複製（ループ用） */}
+        <section
+          className="h-screen w-full flex items-center justify-center relative"
+          style={{
+            backgroundImage: `url(${getFashionImage(0)})`,
+            backgroundSize: "cover",
+            backgroundPosition: "top",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          {/* フォールバック背景（画像が読み込めない場合） */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 -z-10" />
+          <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10">
+            Section 1
           </div>
         </section>
       </div>
