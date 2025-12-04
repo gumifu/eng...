@@ -93,34 +93,16 @@ export default function DemoPage() {
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
 
-      // 最後のセクション（17: フッター）の場合は最初のセクション（0）に戻る
-      // ただし、スクロール位置は18（最初のセクションの複製）に移動してから、スムーズに最初に戻る
+      // 最後のセクション（17: フッター）で止まる
       let nextSectionIndex;
       let targetScroll;
       if (currentSectionIndex >= 17) {
-        // フッターを過ぎたら最初のセクションの複製（18）に移動
-        nextSectionIndex = 0;
-        targetScroll = 18 * sectionHeight;
-        
-        // スムーズにセクション18に移動
-        scrollElement.scrollTo({
-          top: targetScroll,
-          behavior: "smooth",
-        });
-        
-        // セクション18に到達したら、スムーズに最初のセクションに戻る
-        setTimeout(() => {
-          if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
-          }
-        }, 500); // スクロール完了を待つ
+        // フッターで止まる（これ以上進まない）
+        return;
       } else {
         nextSectionIndex = currentSectionIndex + 1;
         targetScroll = nextSectionIndex * sectionHeight;
-        
+
         // スムーズに次のセクションへスクロール
         scrollElement.scrollTo({
           top: targetScroll,
@@ -150,21 +132,9 @@ export default function DemoPage() {
     const currentScroll = scrollElement.scrollTop;
     const section = Math.round(currentScroll / sectionHeight);
 
-    // フッター（セクション17）を過ぎて最初のセクションの複製（セクション18）に到達したら、
-    // スムーズに元の最初のセクション（セクション0）の位置に戻す
-    if (section >= 18) {
-      // スムーズに最初のセクションに戻す
-      setTimeout(() => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
-        }
-      }, 100);
-      setCurrentSection(0);
-    } else if (section === 17) {
-      // フッターセクション
+    // フッター（セクション17）で止まる
+    if (section >= 17) {
+      // フッターセクションで止まる
       setCurrentSection(16);
     } else {
       setCurrentSection(Math.min(section, 16));
@@ -693,22 +663,6 @@ export default function DemoPage() {
           </div>
         </section>
 
-        {/* セクション18: 最初のセクションの複製（ループ用） */}
-        <section
-          className="h-screen w-full flex items-end justify-start relative"
-          style={{
-            backgroundImage: `url(${getFashionImage(0)})`,
-            backgroundSize: "cover",
-            backgroundPosition: "top",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          {/* フォールバック背景（画像が読み込めない場合） */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 -z-10" />
-          <div className="text-white text-6xl font-bold drop-shadow-lg relative z-10 pb-8 pl-8">
-            Section 1
-          </div>
-        </section>
       </div>
 
       {/* コントローラードット（右端中央配置、Apple風デザイン） */}
