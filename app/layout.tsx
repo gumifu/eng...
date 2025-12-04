@@ -27,8 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
-        <nav className="border-b border-gray-200 bg-white dark:bg-gray-900">
+        <nav className="border-b border-gray-200 bg-white dark:bg-gray-900 demo-hide-nav">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
@@ -57,6 +58,12 @@ export default function RootLayout({
                   className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Weaknesses
+                </Link>
+                <Link
+                  href="/demo"
+                  className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+                >
+                  Demo
                 </Link>
               </div>
             </div>
