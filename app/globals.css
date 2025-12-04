@@ -29,3 +29,11 @@ body {
 body:has([data-demo-page]) nav.demo-hide-nav {
   display: none !important;
 }
+
+/* デモページのコントローラー周辺でテキスト選択を無効化 */
+[data-demo-page] [class*="touch-none"] {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}

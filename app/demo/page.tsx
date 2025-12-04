@@ -86,7 +86,7 @@ export default function DemoPage() {
       const sectionHeight = window.innerHeight;
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
-      
+
       // 最後のセクション（16）の場合は最初のセクション（0）に戻る
       let nextSectionIndex;
       if (currentSectionIndex >= 16) {
@@ -94,7 +94,7 @@ export default function DemoPage() {
       } else {
         nextSectionIndex = currentSectionIndex + 1;
       }
-      
+
       const targetScroll = nextSectionIndex * sectionHeight;
 
       // スムーズに次のセクションへスクロール
@@ -125,7 +125,7 @@ export default function DemoPage() {
     const currentScroll = scrollElement.scrollTop;
     const maxScroll = scrollElement.scrollHeight - scrollElement.clientHeight;
     const section = Math.round(currentScroll / sectionHeight);
-    
+
     // 最後のセクション（16）の終端に達したら最初のセクション（0）に戻る
     // スクロール位置が最後のセクションの終端に近い場合（50px以内）
     if (section >= 16 && currentScroll >= maxScroll - 50) {
