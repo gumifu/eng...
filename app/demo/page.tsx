@@ -49,8 +49,6 @@ export default function DemoPage() {
   const [currentSection, setCurrentSection] = useState(0); // 現在のセクション（0-16）
   const [isCarouselPaused, setIsCarouselPaused] = useState(true); // カルーセルの一時停止（初期は停止）
   const [isMounted, setIsMounted] = useState(false); // マウント状態
-  const isUserScrollingRef = useRef(false); // ユーザーがスクロール中かどうか
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null); // スクロール停止検出用タイマー
 
   // スクロール制御用の状態
   const initialCenterPosRef = useRef({ x: 0, y: 0 }); // 初期中心位置
@@ -74,10 +72,6 @@ export default function DemoPage() {
     if (carouselIntervalRef.current) {
       clearInterval(carouselIntervalRef.current);
       carouselIntervalRef.current = null;
-    }
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-      scrollTimeoutRef.current = null;
     }
   };
 
@@ -297,33 +291,13 @@ export default function DemoPage() {
 
     const handleScroll = () => {
       updateCurrentSection();
-
-      // ユーザーがスクロールしていることを検出
-      isUserScrollingRef.current = true;
-      setIsCarouselPaused(true);
-
-      // スクロール停止を検出するタイマーをリセット
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-
-      // スクロールが停止してから1秒後にカルーセルを再開
-      scrollTimeoutRef.current = setTimeout(() => {
-        isUserScrollingRef.current = false;
-        if (!isLongPress) {
-          setIsCarouselPaused(false);
-        }
-      }, 1000);
     };
 
     scrollElement.addEventListener("scroll", handleScroll);
     return () => {
       scrollElement.removeEventListener("scroll", handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
     };
-  }, [updateCurrentSection, isLongPress]);
+  }, [updateCurrentSection]);
 
   // カルーセルの開始/停止
   useEffect(() => {
@@ -662,7 +636,6 @@ export default function DemoPage() {
             </div>
           </div>
         </section>
-
       </div>
 
       {/* コントローラードット（右端中央配置、Apple風デザイン） */}
