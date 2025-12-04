@@ -331,10 +331,21 @@ export default function DemoPage() {
 
   // マウント状態の管理（ハイドレーションエラーを防ぐ）
   useEffect(() => {
+    // モバイルデバイスかどうかを検出
+    const checkMobile = () => {
+      return (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
+        ('ontouchstart' in window)
+      );
+    };
+
     // マウント後に状態を更新（次のレンダリングサイクルで）
     const timeoutId = setTimeout(() => {
       setIsMounted(true);
-      setIsCarouselPaused(false);
+      const isMobileDevice = checkMobile();
+      // モバイルデバイスの場合はカルーセルを停止したままにする
+      setIsCarouselPaused(isMobileDevice);
     }, 0);
 
     return () => {
