@@ -107,7 +107,7 @@ export default function DemoPage() {
       });
 
       setCurrentSection(nextSectionIndex);
-    }, 3000); // 3秒ごとに次のセクションへ
+    }, 5000); // 5秒ごとに次のセクションへ
   }, [isCarouselPaused]);
 
   // startCarouselの参照を更新
@@ -411,42 +411,63 @@ export default function DemoPage() {
               {/* 左側：ナビゲーションリンク */}
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between cursor-pointer group">
-                  <span className="text-black font-semibold text-base">SHOP</span>
+                  <span className="text-black font-semibold text-base">
+                    SHOP
+                  </span>
                   <span className="text-black text-xl">+</span>
                 </div>
                 <div className="ml-0 flex flex-col gap-3 text-sm text-black">
-                  <a href="#" className="hover:underline">WOMEN</a>
-                  <a href="#" className="hover:underline">MEN</a>
-                  <a href="#" className="hover:underline">KIDS</a>
-                  <a href="#" className="hover:underline">HOME</a>
-                  <a href="#" className="hover:underline">STUDENT DISCOUNT</a>
-                  <a href="#" className="hover:underline">GIFT CARDS</a>
+                  <a href="#" className="hover:underline">
+                    WOMEN
+                  </a>
+                  <a href="#" className="hover:underline">
+                    MEN
+                  </a>
+                  <a href="#" className="hover:underline">
+                    KIDS
+                  </a>
+                  <a href="#" className="hover:underline">
+                    HOME
+                  </a>
+                  <a href="#" className="hover:underline">
+                    STUDENT DISCOUNT
+                  </a>
+                  <a href="#" className="hover:underline">
+                    GIFT CARDS
+                  </a>
                 </div>
 
                 <div className="flex items-center justify-between cursor-pointer group mt-4">
-                  <span className="text-black font-semibold text-base">CORPORATE INFO</span>
+                  <span className="text-black font-semibold text-base">
+                    CORPORATE INFO
+                  </span>
                   <span className="text-black text-xl">+</span>
                 </div>
 
                 <div className="flex items-center justify-between cursor-pointer group">
-                  <span className="text-black font-semibold text-base">HELP</span>
+                  <span className="text-black font-semibold text-base">
+                    HELP
+                  </span>
                   <span className="text-black text-xl">+</span>
                 </div>
 
                 <div className="flex items-center justify-between cursor-pointer group">
-                  <span className="text-black font-semibold text-base">BECOME A MEMBER</span>
+                  <span className="text-black font-semibold text-base">
+                    BECOME A MEMBER
+                  </span>
                   <span className="text-black text-xl">+</span>
                 </div>
               </div>
 
               {/* 中央：ロゴとリージョン */}
-              <div className="flex flex-col items-start md:items-center gap-6">
-                <div className="text-black text-4xl font-bold italic">H&M</div>
+              {/* <div className="flex flex-col items-start md:items-center gap-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-2 text-sm text-black">
                   <span>Canada (en) ($)</span>
-                  <a href="#" className="underline hover:no-underline">CHANGE REGION</a>
+                  <a href="#" className="underline hover:no-underline">
+                    CHANGE REGION
+                  </a>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* 下部：ソーシャルメディアとコピーライト */}
@@ -454,52 +475,175 @@ export default function DemoPage() {
               {/* ソーシャルメディアアイコン */}
               <div className="flex gap-6">
                 {/* Instagram */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="Instagram">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <circle cx="17" cy="7" r="1.5" fill="currentColor"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="Instagram"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <circle cx="17" cy="7" r="1.5" fill="currentColor" />
                   </svg>
                 </a>
                 {/* TikTok */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="TikTok">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" fill="currentColor"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="TikTok"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"
+                      fill="currentColor"
+                    />
                   </svg>
                 </a>
                 {/* Spotify */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="Spotify">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <path d="M6 12c0 0 4-2 6-2s6 2 6 2M6 9c0 0 4-2 6-2s6 2 6 2M6 15c0 0 4-2 6-2s6 2 6 2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="Spotify"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <path
+                      d="M6 12c0 0 4-2 6-2s6 2 6 2M6 9c0 0 4-2 6-2s6 2 6 2M6 15c0 0 4-2 6-2s6 2 6 2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </a>
                 {/* YouTube */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="YouTube">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="2" y="7" width="20" height="10" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <path d="M10 12l4-2v4l-4-2z" fill="currentColor"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="YouTube"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect
+                      x="2"
+                      y="7"
+                      width="20"
+                      height="10"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <path d="M10 12l4-2v4l-4-2z" fill="currentColor" />
                   </svg>
                 </a>
                 {/* Pinterest */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="Pinterest">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <path d="M12 8c-2 0-3 1.5-3 2.5 0 .5.5 2 1.5 2.5.5.5 1 0 1-1.5 0-1-1-1.5-1-2.5 0-1.5 1-2.5 2.5-2.5 1.5 0 2.5 1 2.5 2.5 0 2-1.5 3.5-3.5 3.5-1 0-2-.5-2.5-1.5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="Pinterest"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <path
+                      d="M12 8c-2 0-3 1.5-3 2.5 0 .5.5 2 1.5 2.5.5.5 1 0 1-1.5 0-1-1-1.5-1-2.5 0-1.5 1-2.5 2.5-2.5 1.5 0 2.5 1 2.5 2.5 0 2-1.5 3.5-3.5 3.5-1 0-2-.5-2.5-1.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </a>
                 {/* Facebook */}
-                <a href="#" className="text-black hover:opacity-70" aria-label="Facebook">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="2" y="2" width="20" height="20" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <path d="M13 8h3v3h-3v8h-3v-8H8V8h2V6.5c0-1.5 1-2.5 2.5-2.5H15v3h-2z" fill="currentColor"/>
+                <a
+                  href="#"
+                  className="text-black hover:opacity-70"
+                  aria-label="Facebook"
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="2"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      fill="none"
+                    />
+                    <path
+                      d="M13 8h3v3h-3v8h-3v-8H8V8h2V6.5c0-1.5 1-2.5 2.5-2.5H15v3h-2z"
+                      fill="currentColor"
+                    />
                   </svg>
                 </a>
               </div>
 
               {/* コピーライト */}
               <div className="text-black text-xs">
-                <p>The content of this site is copyright-protected and is the property of H & M Hennes & Mauritz AB.</p>
+                <p>
+                  The content of this site is copyright-protected and is the
+                  property of H & M Hennes & Mauritz AB.
+                </p>
               </div>
             </div>
           </div>
