@@ -86,7 +86,15 @@ export default function DemoPage() {
       const sectionHeight = window.innerHeight;
       const currentScroll = scrollElement.scrollTop;
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
-      const nextSectionIndex = Math.min(currentSectionIndex + 1, 16);
+      
+      // 最後のセクション（16）の場合は最初のセクション（0）に戻る
+      let nextSectionIndex;
+      if (currentSectionIndex >= 16) {
+        nextSectionIndex = 0;
+      } else {
+        nextSectionIndex = currentSectionIndex + 1;
+      }
+      
       const targetScroll = nextSectionIndex * sectionHeight;
 
       // スムーズに次のセクションへスクロール
@@ -115,8 +123,25 @@ export default function DemoPage() {
     const scrollElement = scrollContainerRef.current;
     const sectionHeight = window.innerHeight;
     const currentScroll = scrollElement.scrollTop;
+    const maxScroll = scrollElement.scrollHeight - scrollElement.clientHeight;
     const section = Math.round(currentScroll / sectionHeight);
-    setCurrentSection(Math.min(section, 16));
+    
+    // 最後のセクション（16）の終端に達したら最初のセクション（0）に戻る
+    // スクロール位置が最後のセクションの終端に近い場合（50px以内）
+    if (section >= 16 && currentScroll >= maxScroll - 50) {
+      // スムーズに最初のセクションにスクロール
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+      setCurrentSection(0);
+    } else {
+      setCurrentSection(Math.min(section, 16));
+    }
   }, []);
 
   // アニメーションループ（最適化版）
@@ -374,7 +399,7 @@ export default function DemoPage() {
             </div>
           </section>
         ))}
-        
+
         {/* セクション17: フッター */}
         <section className="h-screen w-full flex flex-col items-center justify-center relative bg-black">
           <div className="text-white text-center px-8 max-w-4xl">
@@ -390,13 +415,17 @@ export default function DemoPage() {
                 <p className="text-sm">Press</p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Customer Service</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Customer Service
+                </h3>
                 <p className="text-sm">Contact Us</p>
                 <p className="text-sm">Shipping</p>
                 <p className="text-sm">Returns</p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">Follow Us</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">
+                  Follow Us
+                </h3>
                 <p className="text-sm">Instagram</p>
                 <p className="text-sm">Twitter</p>
                 <p className="text-sm">Facebook</p>
