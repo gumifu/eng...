@@ -94,23 +94,39 @@ export default function DemoPage() {
       const currentSectionIndex = Math.round(currentScroll / sectionHeight);
 
       // 最後のセクション（17: フッター）の場合は最初のセクション（0）に戻る
-      // ただし、スクロール位置は18（最初のセクションの複製）に移動
+      // ただし、スクロール位置は18（最初のセクションの複製）に移動してから、スムーズに最初に戻る
       let nextSectionIndex;
       let targetScroll;
       if (currentSectionIndex >= 17) {
         // フッターを過ぎたら最初のセクションの複製（18）に移動
         nextSectionIndex = 0;
         targetScroll = 18 * sectionHeight;
+        
+        // スムーズにセクション18に移動
+        scrollElement.scrollTo({
+          top: targetScroll,
+          behavior: "smooth",
+        });
+        
+        // セクション18に到達したら、スムーズに最初のセクションに戻る
+        setTimeout(() => {
+          if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }
+        }, 500); // スクロール完了を待つ
       } else {
         nextSectionIndex = currentSectionIndex + 1;
         targetScroll = nextSectionIndex * sectionHeight;
+        
+        // スムーズに次のセクションへスクロール
+        scrollElement.scrollTo({
+          top: targetScroll,
+          behavior: "smooth",
+        });
       }
-
-      // スムーズに次のセクションへスクロール
-      scrollElement.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
 
       setCurrentSection(nextSectionIndex);
     }, 5000); // 5秒ごとに次のセクションへ
@@ -135,15 +151,17 @@ export default function DemoPage() {
     const section = Math.round(currentScroll / sectionHeight);
 
     // フッター（セクション17）を過ぎて最初のセクションの複製（セクション18）に到達したら、
-    // 見えないように元の最初のセクション（セクション0）の位置にジャンプ
+    // スムーズに元の最初のセクション（セクション0）の位置に戻す
     if (section >= 18) {
-      // 瞬時に最初のセクションに戻す（ユーザーには見えない）
-      // requestAnimationFrameを使ってスムーズに
-      requestAnimationFrame(() => {
+      // スムーズに最初のセクションに戻す
+      setTimeout(() => {
         if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTop = 0;
+          scrollContainerRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
         }
-      });
+      }, 100);
       setCurrentSection(0);
     } else if (section === 17) {
       // フッターセクション
@@ -309,16 +327,16 @@ export default function DemoPage() {
 
     const handleScroll = () => {
       updateCurrentSection();
-      
+
       // ユーザーがスクロールしていることを検出
       isUserScrollingRef.current = true;
       setIsCarouselPaused(true);
-      
+
       // スクロール停止を検出するタイマーをリセット
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }
-      
+
       // スクロールが停止してから1秒後にカルーセルを再開
       scrollTimeoutRef.current = setTimeout(() => {
         isUserScrollingRef.current = false;
