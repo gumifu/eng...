@@ -473,7 +473,6 @@ export default function DemoPage() {
           WebkitUserSelect: "none",
           MozUserSelect: "none",
           msUserSelect: "none",
-          cursor: "none",
           touchAction: "none",
         }}
         onPointerDown={handlePointerDown}
@@ -564,16 +563,23 @@ export default function DemoPage() {
         )}
       </div>
 
-      {/* スタイル（スクロールバー非表示用、カーソル非表示用） */}
+      {/* スタイル（スクロールバー非表示用、モバイルでのカーソル非表示用） */}
       <style jsx global>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
-        [data-demo-page] * {
-          cursor: none !important;
-          -webkit-tap-highlight-color: transparent;
+        /* モバイルデバイスでのみカーソルを非表示 */
+        @media (hover: none) and (pointer: coarse) {
+          [data-demo-page] * {
+            cursor: none !important;
+            -webkit-tap-highlight-color: transparent;
+          }
+          [data-demo-page] *:active {
+            cursor: none !important;
+          }
         }
-        [data-demo-page] *:active {
+        /* コントローラー上では常にカーソルを非表示 */
+        [data-demo-page] [class*="touch-none"] {
           cursor: none !important;
         }
       `}</style>
