@@ -184,6 +184,8 @@ export default function DemoPage() {
     // テキスト選択を防ぐ
     if (e.target instanceof HTMLElement) {
       e.target.style.userSelect = "none";
+      e.target.style.webkitUserSelect = "none";
+      e.target.style.touchAction = "none";
     }
     if (!dotRef.current) return;
 
@@ -662,6 +664,19 @@ export default function DemoPage() {
         onPointerLeave={handlePointerLeave}
         onDragStart={(e) => e.preventDefault()}
         onMouseDown={(e) => e.preventDefault()}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onTouchMove={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onContextMenu={(e) => e.preventDefault()}
       >
         {/* 外側の枠（楕円形、長押し後に表示、固定） */}
         {isLongPress && (
@@ -761,6 +776,16 @@ export default function DemoPage() {
         /* コントローラー上では常にカーソルを非表示 */
         [data-demo-page] [class*="touch-none"] {
           cursor: none !important;
+        }
+        /* コントローラー周辺でテキスト選択とタッチ動作を防ぐ */
+        [data-demo-page] [class*="touch-none"],
+        [data-demo-page] [class*="touch-none"] * {
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          -moz-user-select: none !important;
+          -ms-user-select: none !important;
+          user-select: none !important;
+          touch-action: none !important;
         }
       `}</style>
     </div>
