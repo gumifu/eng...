@@ -334,9 +334,12 @@ export default function DemoPage() {
     // モバイルデバイスかどうかを検出
     const checkMobile = () => {
       return (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-        (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) ||
-        ('ontouchstart' in window)
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        ) ||
+        (window.matchMedia &&
+          window.matchMedia("(hover: none) and (pointer: coarse)").matches) ||
+        "ontouchstart" in window
       );
     };
 
@@ -643,7 +646,7 @@ export default function DemoPage() {
               <div className="text-black text-xs">
                 <p>
                   The content of this site is copyright-protected and is the
-                  property of H & M Hennes & Mauritz AB.
+                  property of TEST AB.
                 </p>
               </div>
             </div>

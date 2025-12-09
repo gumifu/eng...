@@ -100,3 +100,6 @@ OpenAI APIを使用するには、**支払い方法の設定が必要**です：
 詳細は[OpenAI Pricing](https://openai.com/api/pricing/)を確認してください。
 
 
+
+
+
